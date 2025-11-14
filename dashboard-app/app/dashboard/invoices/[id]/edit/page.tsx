@@ -8,9 +8,10 @@ export const metadata = {
   title: 'Edit Invoice',
 };
 
-export default async function Page({ params }: { params: { id: string } }) {
+export default async function Page({ params }: { params: Promise<{ id: string }> }) {
+  const resolvedParams = await params;
   // Find the invoice from placeholder data
-  const invoice = invoices.find((inv: any) => inv.id === params.id);
+  const invoice = invoices.find((inv: any) => inv.id === resolvedParams.id);
   
   // Use placeholder data for customers
   const customersData: CustomerField[] = customers.map(c => ({
@@ -19,7 +20,7 @@ export default async function Page({ params }: { params: { id: string } }) {
   }));
 
   const invoiceForm: InvoiceForm = {
-    id: params.id,
+    id: resolvedParams.id,
     customer_id: invoice?.customer_id || '',
     amount: invoice?.amount || 0,
     status: invoice?.status || 'pending',
@@ -32,7 +33,7 @@ export default async function Page({ params }: { params: { id: string } }) {
           { label: 'Invoices', href: '/dashboard/invoices' },
           {
             label: 'Edit Invoice',
-            href: `/dashboard/invoices/${params.id}/edit`,
+            href: `/dashboard/invoices/${resolvedParams.id}/edit`,
             active: true,
           },
         ]}
