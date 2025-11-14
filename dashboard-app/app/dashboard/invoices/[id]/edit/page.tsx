@@ -23,7 +23,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     id: resolvedParams.id,
     customer_id: invoice?.customer_id || '',
     amount: invoice?.amount || 0,
-    status: invoice?.status || 'pending',
+    status: (invoice?.status === 'paid' ? 'paid' : 'pending'),
   };
 
   return (
